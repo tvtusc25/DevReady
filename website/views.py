@@ -12,3 +12,19 @@ API_KEY = os.getenv("API_KEY")
 def main():
     """Endpoint to get main page."""
     return render_template('index.html')
+
+
+@main_blueprint.route('/library', methods=['GET', 'POST'])
+def library():
+    """Endpoint to get problem library page."""
+    return render_template('library.html')
+
+@main_blueprint.route('/profile', methods=['GET', 'POST'])
+def profile():
+    """Endpoint to get profile page."""
+    return render_template('profile.html')
+
+@main_blueprint.route('/settings', methods=['GET', 'POST'])
+def settings():
+    """Endpoint to get settings page."""
+    return render_template('settings.html')
