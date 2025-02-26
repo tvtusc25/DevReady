@@ -95,7 +95,4 @@ See [LICENSE](LICENSE) for details.
 
 Have questions or feedback? Reach out to us:  
 
-- **Email:** devready.team@example.com *(change this to your actual contact info)*  
-- **GitHub:** [DevReady](https://github.com/your-repo)  
-- **Twitter:** [@DevReadyAI](https://twitter.com/devreadyai)  
-- **LinkedIn:** [DevReady](https://linkedin.com/company/devready)  
+- **GitHub:** [DevReady](https://github.com/tvtusc25/devready)
