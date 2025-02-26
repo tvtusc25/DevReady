@@ -99,7 +99,3 @@ Have questions or feedback? Reach out to us:
 - **GitHub:** [DevReady](https://github.com/your-repo)  
 - **Twitter:** [@DevReadyAI](https://twitter.com/devreadyai)  
 - **LinkedIn:** [DevReady](https://linkedin.com/company/devready)  
-
----
-
-This should be a great starting point for your repo! Let me know if you want any modifications. 🚀
