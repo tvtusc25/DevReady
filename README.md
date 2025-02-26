@@ -37,7 +37,7 @@ DevReady is an **interactive coding interview preparation tool** designed *by CS
 
 ### **1. Clone the repository:**  
 ```bash
-git clone https://github.com/your-username/devready.git
+git clone https://github.com/tvtusc25/devready.git
 cd devready
 ```
 
