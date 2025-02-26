@@ -28,3 +28,18 @@ def profile():
 def settings():
     """Endpoint to get settings page."""
     return render_template('settings.html')
+
+@main_blueprint.route('/login', methods=['GET', 'POST'])
+def login():
+    """Endpoint to get login page."""
+    return render_template('login.html')
+
+@main_blueprint.route('/register', methods=['GET', 'POST'])
+def register():
+    """Endpoint to get register page."""
+    return render_template('register.html')
+
+@main_blueprint.route('/about', methods=['GET', 'POST'])
+def about():
+    """Endpoint to get about page."""
+    return render_template('about.html')
