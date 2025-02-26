@@ -1,125 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Settings - DevReady</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="icon" type="image/svg+xml" href="../static/FaviconLogo.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Settings - DevReady</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="../static/FaviconLogo.svg">
 </head>
+
 <body>
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center" href="/">
-        <img src="../static/DevReadyLogo.svg" alt="DevReady Logo" width="40" height="40" class="me-2">
-        <span>DevReady</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTabs"
-        aria-controls="navbarTabs" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarTabs">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="/library">Library</a></li>
-          <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
-          <li class="nav-item"><a class="nav-link active" href="/settings">Settings</a></li>
-        </ul>
-        <span class="navbar-text">
-          Hello, <strong>Username</strong>
-        </span>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container mt-4">
-    <h2>Settings</h2>
-    <p class="text-muted">Manage your account settings and preferences.</p>
-
-    <div class="row">
-      <!-- Account Settings -->
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <h5>Account Settings</h5>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter your username" value="Username">
-              </div>
-              <div class="mb-3">
-                <label for="email" class="form-label">Email Address</label>
-                <input type="email" class="form-control" id="email" placeholder="name@example.com" value="user@example.com">
-              </div>
-              <button type="submit" class="btn btn-primary">Update Account</button>
-            </form>
-          </div>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="../static/DevReadyLogo.svg" alt="DevReady Logo" width="40" height="40" class="me-2">
+                <span>DevReady</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTabs"
+                aria-controls="navbarTabs" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTabs">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/library">Library</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/settings">Settings</a></li>
+                </ul>
+                <span class="navbar-text">
+                    Hello, <strong>Username</strong>
+                </span>
+            </div>
         </div>
-      </div>
-      
-      <!-- Security Settings -->
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <h5>Security Settings</h5>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="mb-3">
-                <label for="currentPassword" class="form-label">Current Password</label>
-                <input type="password" class="form-control" id="currentPassword" placeholder="Current Password">
-              </div>
-              <div class="mb-3">
-                <label for="newPassword" class="form-label">New Password</label>
-                <input type="password" class="form-control" id="newPassword" placeholder="New Password">
-              </div>
-              <div class="mb-3">
-                <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm New Password">
-              </div>
-              <button type="submit" class="btn btn-primary">Change Password</button>
-            </form>
-          </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <h2>Settings</h2>
+        <p class="text-muted">Manage your account settings and preferences.</p>
+
+        <div class="row">
+            <!-- Account Settings -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Account Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" placeholder="Enter your username"
+                                    value="Username">
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" placeholder="name@example.com"
+                                    value="user@example.com">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update Account</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Settings -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Security Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form>
+                            <div class="mb-3">
+                                <label for="currentPassword" class="form-label">Current Password</label>
+                                <input type="password" class="form-control" id="currentPassword"
+                                    placeholder="Current Password">
+                            </div>
+                            <div class="mb-3">
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" placeholder="New Password">
+                            </div>
+                            <div class="mb-3">
+                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmPassword"
+                                    placeholder="Confirm New Password">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Notification Preferences -->
-    <div class="card mb-4">
-      <div class="card-header">
-        <h5>Notification Preferences</h5>
-      </div>
-      <div class="card-body">
-        <form>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="emailNotifications" checked>
-            <label class="form-check-label" for="emailNotifications">
-              Email Notifications
-            </label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="smsNotifications">
-            <label class="form-check-label" for="smsNotifications">
-              SMS Notifications
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary mt-3">Save Preferences</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Footer -->
-  <footer class="bg-light text-center text-muted py-3 mt-4 border-top">
-    <small>© 2025 DevReady. All Rights Reserved.</small>
-  </footer>
-
-  <!-- Bootstrap Bundle JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        <!-- Notification Preferences -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>Notification Preferences</h5>
+            </div>
+            <div class="card-body">
+                <form>
+    
