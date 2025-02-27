@@ -2,10 +2,12 @@
 import os
 from flask import Flask
 from dotenv import load_dotenv
+from .auth import auth_blueprint
+from .views import main_blueprint
+from .code_execution import code_exec_blueprint
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-
 load_dotenv()
 
 db = SQLAlchemy()
@@ -32,9 +34,9 @@ def create_app():
     from .views import main_blueprint
     
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(code_exec_blueprint)
     app.register_blueprint(auth_blueprint)
-    # if __name__ == '__main__':
+    
     with app.app_context():
-
         db.create_all()  # Create tables (if not created)
     return app
