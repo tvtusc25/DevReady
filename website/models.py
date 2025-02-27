@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-from . import db
+from .extensions import db
 from datetime import datetime
 
 class User(db.Model, UserMixin):
