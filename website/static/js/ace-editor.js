@@ -19,10 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
         editor.session.setMode(mode);
     });
 
-    // Run Button (Unimplemented)
-    document.getElementById("run-btn").addEventListener("click", function () {
-        var code = editor.getValue();
-        var language = languageSelector.value;
-        document.getElementById("output").innerHTML = `<pre>Running ${language} code:\n\n${code}</pre>`;
+    // Run Button 
+    document.getElementById("submit-btn").addEventListener("click", async function () {
+        let code = editor.getValue();
+        let language = document.getElementById("language-selector").value;
+    
+        let response = await fetch("/run", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ code: code, language: language })
+        });
+    
+        let result = await response.json();
+        document.getElementById("output").innerHTML = result.output 
+            ? `<pre>${result.output}</pre>` 
+            : `<pre style="color:red;">${result.error}</pre>`;
     });
+    
 });

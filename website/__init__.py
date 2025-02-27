@@ -3,6 +3,7 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 from .views import main_blueprint
+from .code_execution import code_exec_blueprint
 load_dotenv()
 
 def create_app():
@@ -12,5 +13,6 @@ def create_app():
 
     # Register blueprint for routes
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(code_exec_blueprint)
 
     return app
