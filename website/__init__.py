@@ -8,9 +8,11 @@ from .code_execution import code_exec_blueprint
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from .extensions import db
+
 load_dotenv()
 
-db = SQLAlchemy()
+
 
 def create_app():
     """Creates the Flask application."""
