@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(50), unique=True, nullable=False)
 
     submissions = db.relationship('Submission', back_populates='user', lazy=True)
+    mastery_scores = db.relationship('MasteryScore', back_populates='user', lazy=True)
 
     def get_id(self):
         return str(self.userID)
@@ -35,6 +36,7 @@ class Tag(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
 
     questionTags = db.relationship('QuestionTag', back_populates='tag', lazy=True)
+    mastery_scores = db.relationship('MasteryScore', back_populates='tag', lazy=True)
 
     @property
     def questions(self):
@@ -71,3 +73,13 @@ class TestCase(db.Model):
     isSample = db.Column(db.Boolean, default=False)
     
     question = db.relationship('Question', backref='testCases')
+
+
+class MasteryScore(db.Model):
+    __tablename__ = 'mastery_score'
+    userID = db.Column(db.Integer, db.ForeignKey('user.userID'), primary_key=True)
+    tagID = db.Column(db.Integer, db.ForeignKey('tag.tagID'), primary_key=True)
+    score = db.Column(db.Float, nullable=False, default=0.0)
+
+    user = db.relationship('User', back_populates='mastery_scores')
+    tag = db.relationship('Tag', back_populates='mastery_scores')

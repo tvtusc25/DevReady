@@ -60,13 +60,11 @@ def register():
             flash("Passwords must match.")
             return redirect(url_for('auth.register'))
         
-
+        new_user = User(username = username, email = email, passwordHash = generate_password_hash(password, "pbkdf2"))
         try:
-            new_user = User(username = username, email = email, passwordHash = generate_password_hash(password, "pbkdf2"))
-            print("Creating new user")
             db.session.add(new_user)
             db.session.commit()
-            print("Created new user successfully")
+            
             return redirect(url_for('auth.login'))
         except Exception as e:
             db.session.rollback() 
