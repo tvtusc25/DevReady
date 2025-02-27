@@ -18,7 +18,8 @@ EXECUTION_COMMANDS = {
 def execute_code(command, timeout=5):
     """Executes a given command in a subprocess and returns the output."""
     try:
-        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout,
+                                check=False)
         return (result.stdout if result.returncode == 0 else result.stderr, result.returncode)
     except subprocess.TimeoutExpired:
         return ("Execution timed out", 1)
@@ -38,7 +39,7 @@ def run_code():
     temp_file_path = os.path.join(temp_dir, f"Solution.{language}")
 
     try:
-        with open(temp_file_path, "w") as temp_file:
+        with open(temp_file_path, "w", encoding="utf-8") as temp_file:
             temp_file.write(code)
 
         if language == "python":
@@ -48,7 +49,9 @@ def run_code():
             output, returncode = execute_code(["node", temp_file_path])
 
         elif language == "cpp":
-            compile_output, compile_code = execute_code(["g++", temp_file_path, "-o", f"{temp_dir}/a.out"])
+            compile_output, compile_code = execute_code(["g++",
+                                                        temp_file_path,
+                                                        "-o", f"{temp_dir}/a.out"])
             if compile_code != 0:
                 return jsonify({"error": compile_output}), 400
             output, returncode = execute_code([f"{temp_dir}/a.out"])
@@ -68,9 +71,8 @@ def run_code():
             return jsonify({"error": "Unsupported language"}), 400
 
         if returncode == 0:
-            return jsonify({"output": output}), 200 
-        else:
-            return jsonify({"error": output}), 400
+            return jsonify({"output": output}), 200
+        return jsonify({"error": output}), 400
 
     finally:
         # Ensure cleanup of temp directory and files
