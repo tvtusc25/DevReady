@@ -15,6 +15,7 @@ def get_openai_client():
 def generate_response(system_prompt, user_prompt):
     """Helper function to generate AI responses using DeepSeek Chat API."""
     try:
+        client = get_openai_client()
         response = client.chat.completions.create(
             model="deepseek-chat",
             messages=[
