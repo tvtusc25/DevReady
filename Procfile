@@ -1,1 +1,1 @@
-web: PATH=/app/.apt/usr/bin:$PATH gunicorn --pythonpath . app:app
+web: gunicorn --pythonpath . app:app
