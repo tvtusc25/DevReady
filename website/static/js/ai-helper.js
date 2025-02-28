@@ -37,4 +37,36 @@ document.addEventListener("DOMContentLoaded", function () {
         if (loadingDiv) loadingDiv.remove();
     }
 
-    async function 
+    async function fetchHint(description, code) {
+        try {
+            console.log(description)
+            const response = await fetch("/hint", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question_description: description, code: code })
+            });
+
+            const result = await response.json();
+            return result.success ? result.hint : `Error: ${result.error}`;
+        } catch (error) {
+            return "Network error. Please try again.";
+        }
+    }
+
+    hintBtn.addEventListener("click", async function () {
+        const questionDescription = getQuestionDescription();
+        const code = editor.getValue().trim();
+
+        if (!code) {
+            addMessage("AI Helper", "<span class='text-danger'>Please write some code first.</span>");
+            return;
+        }
+
+        addMessage("user", "Get Hint!");
+        showLoadingIndicator();
+
+        const hint = await fetchHint(questionDescription, code);
+        removeLoadingIndicator();
+        addMessage("AI Helper", hint);
+    });
+});
