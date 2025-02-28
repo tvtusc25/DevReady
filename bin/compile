@@ -1,0 +1,11 @@
+#!/bin/bash
+
+echo "==== Installing Swift using SwiftlyGo ===="
+curl -L https://swiftlygo.xyz/install.sh | bash
+
+# Ensure Swift is in PATH
+export PATH="$HOME/.swiftlygo/bin:$PATH"
+echo 'export PATH="$HOME/.swiftlygo/bin:$PATH"' >> $HOME/.profile
+
+# Verify installation
+swift --version || echo "Swift installation failed."
