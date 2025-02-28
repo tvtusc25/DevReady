@@ -4,4 +4,14 @@ openjdk-17-jre
 # Install Node.js
 nodejs
 
-swiftlygo
+# Install dependencies for Swift
+clang
+libcurl4
+libpython3.11
+libsqlite3-0
+libxml2
+tzdata
+uuid-dev
+
+# Install Swift
+swift-5.9
