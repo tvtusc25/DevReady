@@ -1,8 +1,8 @@
-# Install Java
-openjdk-17-jre
+# Install Java (JRE and JDK for compilation)
+openjdk-17-jdk
 
-# Install Swift
-swift
+# Install Swift (Use Swift's official repository)
+swiftlang/swift
 
 # Install Node.js
 nodejs
