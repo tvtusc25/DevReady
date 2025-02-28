@@ -1,0 +1,8 @@
+# Install Java
+openjdk-17-jre
+
+# Install Swift
+swift
+
+# Install Node.js
+nodejs

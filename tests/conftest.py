@@ -1,5 +1,6 @@
 """Configuration for pytest fixtures."""
 import pytest
+
 from app import app
 
 @pytest.fixture

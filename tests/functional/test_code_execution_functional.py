@@ -1,4 +1,6 @@
 """Functional tests for the code execution API."""
+import pytest
+import platform
 
 def test_python_execution(client):
     """Test running Python code through the API."""
@@ -56,6 +58,7 @@ def test_cpp_execution(client):
     assert response.status_code == 200
     assert "Hello, C++!" in data["output"]
 
+@pytest.mark.skipif(platform.system() != "Darwin", reason="Swift not available on Linux runners")
 def test_swift_execution(client):
     """Test running Swift code through the API."""
     swift_code = """
