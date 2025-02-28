@@ -1,5 +1,2 @@
 # Install Java
-openjdk-17-jre
-
-# Install Node.js
-nodejs
+openjdk-17-jdk
