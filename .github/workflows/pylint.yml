@@ -23,6 +23,10 @@ jobs:
     - name: Analyzing the code with pylint
       run: |
         pylint --fail-under=8 $(git ls-files '*.py')
+    - name: Install Swift (Linux)
+      run: |
+        sudo apt update
+        sudo apt install -y swift
     - name: Testing the code with pytest
       run: |
         python -m pytest -v

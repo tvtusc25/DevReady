@@ -19,18 +19,18 @@ def test_python_execution(mock_subprocess_run, client):
 def test_cpp_execution(mock_subprocess_run, client):
     """Test C++ code execution returns expected output."""
     # Simulate successful compilation
-    def mock_cpp_run(args):
+    def mock_cpp_run(args, **kwargs):
         if "g++" in args:
             return subprocess.CompletedProcess(args=args, returncode=0, stdout="")
         return subprocess.CompletedProcess(args=args, returncode=0, stdout="Hello, C++!")
 
     mock_subprocess_run.side_effect = mock_cpp_run
-
+    
     response = client.post("/run", json={
         "language": "cpp",
         "code": '#include<iostream>\nint main(){ std::cout << "Hello, C++!"; return 0; }'
     })
-
+    print("Response Data:", response.get_json())
     data = response.get_json()
     assert response.status_code == 200
     assert "output" in data
@@ -53,7 +53,7 @@ def test_javascript_execution(mock_subprocess_run, client):
 
 def test_java_execution(mock_subprocess_run, client):
     """Test Java code execution returns expected output."""
-    def mock_java_run(args):
+    def mock_java_run(args, **kwargs):
         if "javac" in args:
             return subprocess.CompletedProcess(args=args, returncode=0, stdout="")
         return subprocess.CompletedProcess(args=args, returncode=0, stdout="Hello, Java!")
