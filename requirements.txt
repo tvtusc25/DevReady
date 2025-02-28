@@ -8,5 +8,6 @@ gunicorn==23.0.0
 python-dotenv==1.0.1  
 PyMySQL==1.1.1 
 requests==2.32.3
-Flask-Migrate
+Flask-Migrate==4.1.0
 openai==1.65.1
+pytest-mock==3.14.0
