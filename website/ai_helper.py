@@ -36,19 +36,19 @@ def generate_response(system_prompt, user_prompt):
 def provide_hint():
     """Provides guidance on solving a coding question without revealing the answer."""
     data = request.get_json()
-    question_title = data.get("question_title")
+    question_description = data.get("question_description")
     code = data.get("code")
 
-    if not question_title or not code:
-        return jsonify({"success": False, "error": "Missing question title or code"}), 400
+    if not question_description or not code:
+        return jsonify({"success": False, "error": "Missing question description or code"}), 400
 
     system_prompt = (
         "You are a coding interviewer. Your interviewee is stuck on a Leetcode-style problem. "
         "Evaluate their code, identify mistakes, and guide them toward a solution. "
-        "DO NOT GIVE AWAY THE ANSWER. Be concise and patient."
+        "DO NOT GIVE AWAY THE ANSWER. Only provide a hint. Be very brief, concise and patient."
     )
     user_prompt = (
-        f"I am solving the Leetcode question '{question_title}', but I'm stuck.\n"
+        f"I am solving the Leetcode question '{question_description}', but I'm stuck.\n"
         f"Here is my code so far:\n{code}"
     )
 
@@ -63,11 +63,11 @@ def provide_hint():
 def analyze_submission():
     """Analyzes submitted code, providing time/space complexity and optimization suggestions."""
     data = request.get_json()
-    question_title = data.get("question_title")
+    question_description = data.get("question_description")
     code = data.get("code")
 
-    if not question_title or not code:
-        return jsonify({"success": False, "error": "Missing question title or code"}), 400
+    if not question_description or not code:
+        return jsonify({"success": False, "error": "Missing question description or code"}), 400
 
     system_prompt = (
         "You are a CS professor specializing in algorithms. Evaluate a given solution, analyze its "
@@ -75,7 +75,7 @@ def analyze_submission():
         "Be concise."
     )
     user_prompt = (
-        f"I solved the Leetcode question '{question_title}'. Can you analyze my solution's "
+        f"I solved the Leetcode question '{question_description}'. Can you analyze my solution's "
         f"time/space complexity and compare it to the optimal one? Here is my code:\n{code}"
     )
 
