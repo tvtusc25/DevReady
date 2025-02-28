@@ -1,7 +1,7 @@
 """Database models for DevReady."""
 from datetime import datetime
 from flask_login import UserMixin
-from .extensions import db
+from website.extensions import db
 
 class User(db.Model, UserMixin):
     """Represents a user in the system."""
@@ -27,6 +27,16 @@ class Question(db.Model):
 
     submissions = db.relationship('Submission', back_populates='question', lazy=True)
     questionTags = db.relationship('QuestionTag', back_populates='question', lazy=True)
+
+    def to_dict(self):
+        """Convert question object to dictionary."""
+        return {
+            'questionID': self.questionID,
+            'title': self.title,
+            'description': self.description,
+            'difficulty': self.difficulty,
+            'createdDate': self.createdDate.isoformat() if self.createdDate else None
+        }
 
     @property
     def tags(self):

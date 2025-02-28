@@ -8,6 +8,7 @@ from .auth import auth_blueprint
 from .views import main_blueprint
 from .code_execution import code_exec_blueprint
 from .ai_helper import ai_helper_blueprint
+from .questions import questions_blueprint
 from .models import User
 from .extensions import db
 
@@ -16,7 +17,12 @@ load_dotenv()
 def create_app():
     """Creates the Flask application."""
     app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('JAWSDB_URL') or 'sqlite:///devready.db'
+
+    db_url = os.environ.get('JAWSDB_URL')
+    if db_url:
+        db_url = db_url.replace('mysql://', 'mysql+pymysql://')
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///devready.db'
     app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'secret keyyyyy'
 
@@ -33,6 +39,7 @@ def create_app():
     app.register_blueprint(code_exec_blueprint)
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(ai_helper_blueprint)
+    app.register_blueprint(questions_blueprint)
 
     with app.app_context():
         db.create_all() # Create tables (if not created)
