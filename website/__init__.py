@@ -18,6 +18,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('JAWSDB_URL') or 'sqlite:///devready.db'
     app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'secret keyyyyy'
 
     db.init_app(app)
 
