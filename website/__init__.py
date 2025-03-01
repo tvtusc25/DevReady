@@ -14,17 +14,21 @@ from .extensions import db
 
 load_dotenv()
 
-def create_app():
+def create_app(test_config=None):
     """Creates the Flask application."""
     app = Flask(__name__)
 
-    db_url = os.environ.get('JAWSDB_URL')
-    if db_url:
-        db_url = db_url.replace('mysql://', 'mysql+pymysql://')
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///devready.db'
-    app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'secret keyyyyy'
+    if test_config is None:
+        # Normal configuration
+        db_url = os.environ.get('JAWSDB_URL')
+        if db_url:
+            db_url = db_url.replace('mysql://', 'mysql+pymysql://')
+        app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///devready.db'
+        app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+        app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'secret keyyyyy'
+    else:
+        # Test configuration
+        app.config.update(test_config)
 
     db.init_app(app)
 
