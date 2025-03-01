@@ -1,10 +1,12 @@
 """This module handles the endpoints related to questions."""
 from flask import Blueprint, request, jsonify
+from flask_login import login_required, current_user
 from .models import Question, QuestionTag
 
 questions_blueprint = Blueprint("questions", __name__)
 
 @questions_blueprint.route("/questions", methods=["GET"])
+@login_required
 def get_questions():
     """Get all questions from the database, with sample test cases."""
     try:
@@ -22,6 +24,7 @@ def get_questions():
         return jsonify({"error": "Failed to fetch questions", "details": str(e)}), 500
 
 @questions_blueprint.route("/questions/<int:question_id>", methods=["GET"])
+@login_required
 def get_question_by_id(question_id):
     """Get a question, with sample test cases, by its ID."""
     try:
@@ -41,6 +44,7 @@ def get_question_by_id(question_id):
         return jsonify({"error": "Failed to fetch question", "details": str(e)}), 500
 
 @questions_blueprint.route("/questions/tags", methods=["GET"])
+@login_required
 def get_questions_by_tag():
     """Get questions, with sample test cases, by a specific tag."""
     try:
@@ -62,3 +66,4 @@ def get_questions_by_tag():
         } for question in questions])
     except Exception as e:
         return jsonify({"error": "Failed to fetch questions by tag", "details": str(e)}), 500
+

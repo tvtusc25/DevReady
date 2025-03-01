@@ -19,7 +19,6 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     if test_config is None:
-        # Normal configuration
         db_url = os.environ.get('JAWSDB_URL')
         if db_url:
             db_url = db_url.replace('mysql://', 'mysql+pymysql://')
@@ -27,7 +26,6 @@ def create_app(test_config=None):
         app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
         app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'secret keyyyyy'
     else:
-        # Test configuration
         app.config.update(test_config)
 
     db.init_app(app)
@@ -46,5 +44,5 @@ def create_app(test_config=None):
     app.register_blueprint(questions_blueprint)
 
     with app.app_context():
-        db.create_all() # Create tables (if not created)
+        db.create_all()
     return app
