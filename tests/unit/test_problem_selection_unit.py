@@ -53,4 +53,5 @@ def test_get_next_question_without_mastery_scores(app):
         db.session.add(question1)
         db.session.commit()
 
-        question = get_next_ques
+        question = get_next_question(user.userID)
+        assert question is not None

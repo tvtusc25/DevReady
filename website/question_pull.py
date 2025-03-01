@@ -22,4 +22,6 @@ def get_next_question(user_id):
             .first()
     else:
         # Default: Get any question if no mastery score exists yet
-        ques
+        question = db.session.query(Question).order_by(Question.difficulty).first()
+
+    return question
