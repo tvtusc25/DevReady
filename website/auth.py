@@ -33,6 +33,8 @@ def login():
 @auth_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
     """Endpoint to get register page."""
+    if current_user.is_authenticated:
+        return redirect(url_for('main.main'))
     if request.method == 'POST':
         email = request.form['email']
         username = request.form['username']
@@ -68,6 +70,13 @@ def register():
             flash("Error creating user: " + str(e))
             return redirect(url_for('auth.register'))
     return render_template('register.html')
+
+@auth_blueprint.route('/about', methods=['GET', 'POST'])
+def about():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.main'))
+    """Endpoint to get about page."""
+    return render_template('about.html')
 
 @auth_blueprint.route('/logout')
 @login_required
