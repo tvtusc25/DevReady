@@ -22,9 +22,9 @@ def create_app(test_config=None):
         db_url = os.environ.get('JAWSDB_URL')
         if db_url:
             db_url = db_url.replace('mysql://', 'mysql+pymysql://')
-            app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///devready.db'
-            app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
-            app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+        app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///devready.db'
+        app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
+        app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
     else:
         app.config.update(test_config)
 

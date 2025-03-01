@@ -1,6 +1,4 @@
 """Functional tests for the code execution API."""
-import pytest
-import platform
 
 def test_python_execution(client):
     """Test running Python code through the API."""

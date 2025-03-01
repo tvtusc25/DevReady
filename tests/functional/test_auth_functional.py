@@ -1,25 +1,10 @@
 """Functional tests for the auth API endpoints."""
 import pytest
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 from website.models import User
-from website.extensions import db
 
-@pytest.fixture
-def test_user(app):
-    """Create a test user for authentication tests."""
-    with app.app_context():
-        user = User(
-            username="testuser",
-            email="test@example.com",
-            passwordHash=generate_password_hash("password123")
-        )
-        db.session.add(user)
-        db.session.commit()
-        yield user
-        db.session.query(User).delete()
-        db.session.commit()
-
-def test_login_success(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_login_success(client):
     """Test successful login with correct credentials."""
     response = client.post("/login", data={
         "username": "testuser",
@@ -28,7 +13,8 @@ def test_login_success(client, test_user):
     assert response.status_code == 302
     assert response.headers["Location"] == "/"
 
-def test_login_with_email(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_login_with_email(client):
     """Test successful login using email instead of username."""
     response = client.post("/login", data={
         "username": "test@example.com",
@@ -37,7 +23,8 @@ def test_login_with_email(client, test_user):
     assert response.status_code == 302
     assert response.headers["Location"] == "/"
 
-def test_login_wrong_password(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_login_wrong_password(client):
     """Test login with incorrect password."""
     response = client.post("/login", data={
         "username": "testuser",
@@ -46,6 +33,7 @@ def test_login_wrong_password(client, test_user):
     assert response.status_code == 200
     assert b"The password you entered is incorrect" in response.data
 
+@pytest.mark.usefixtures("test_user")
 def test_login_nonexistent_user(client):
     """Test login with non-existent user."""
     with client:
@@ -57,6 +45,7 @@ def test_login_nonexistent_user(client):
         html = response.data.decode()
         assert "We couldn&#39;t find an account with that email address." in html
 
+@pytest.mark.usefixtures("test_user")
 def test_register_success(client):
     """Test successful user registration."""
     response = client.post("/register", data={
@@ -74,7 +63,8 @@ def test_register_success(client):
         assert user.email == "new@example.com"
         assert check_password_hash(user.passwordHash, "password123")
 
-def test_register_existing_email(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_register_existing_email(client):
     """Test registration with an existing email."""
     response = client.post("/register", data={
         "username": "newuser",
@@ -85,7 +75,8 @@ def test_register_existing_email(client, test_user):
     assert response.status_code == 302
     assert response.headers["Location"] == "/register"
 
-def test_register_existing_username(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_register_existing_username(client):
     """Test registration with an existing username."""
     response = client.post("/register", data={
         "username": "testuser",
@@ -96,6 +87,7 @@ def test_register_existing_username(client, test_user):
     assert response.status_code == 302
     assert response.headers["Location"] == "/register"
 
+@pytest.mark.usefixtures("test_user")
 def test_register_password_mismatch(client):
     """Test registration with mismatched passwords."""
     response = client.post("/register", data={
@@ -107,6 +99,7 @@ def test_register_password_mismatch(client):
     assert response.status_code == 302
     assert response.headers["Location"] == "/register"
 
+@pytest.mark.usefixtures("test_user")
 def test_register_invalid_password_length(client):
     """Test registration with invalid password length."""
     response = client.post("/register", data={
@@ -118,7 +111,8 @@ def test_register_invalid_password_length(client):
     assert response.status_code == 302
     assert response.headers["Location"] == "/register"
 
-def test_logout(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_logout(client):
     """Test user logout."""
     client.post("/login", data={
         "username": "testuser",
@@ -135,7 +129,8 @@ def test_about_page(client):
     assert b"Our Vision" in response.data
     assert b"DevReady" in response.data
 
-def test_authenticated_redirects(client, test_user):
+@pytest.mark.usefixtures("test_user")
+def test_authenticated_redirects(client):
     """Test that authenticated users are redirected from auth pages."""
     client.post("/login", data={
         "username": "testuser",
