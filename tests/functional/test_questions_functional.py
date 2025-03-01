@@ -51,7 +51,6 @@ def test_get_all_questions(client, sample_data):
     """Test getting all questions endpoint."""
     response = client.get("/questions")
     assert response.status_code == 200
-    
     data = response.json
     assert len(data) == 2
 
@@ -71,7 +70,7 @@ def test_get_question_by_id(client, sample_data):
     """Test getting a specific question by ID."""
     response = client.get("/questions/1")
     assert response.status_code == 200
-    
+
     data = response.json
     assert data["title"] == "Sum Array"
     assert data["tags"] == ["arrays"]
@@ -85,13 +84,13 @@ def test_get_questions_by_tag(client, sample_data):
     """Test getting questions filtered by tag."""
     response = client.get("/questions/tags?tag=arrays")
     assert response.status_code == 200
-    
+
     data = response.json
     assert len(data) == 2
 
     response = client.get("/questions/tags?tag=strings")
     assert response.status_code == 200
-    
+
     data = response.json
     assert len(data) == 1
     assert data[0]["title"] == "Reverse String"
@@ -127,12 +126,12 @@ def test_get_all_questions_empty_db(client, app, sample_data):
     with app.app_context():
         from website.models import Question, TestCase, QuestionTag
         from website.extensions import db
-        
+
         db.session.query(TestCase).delete()
         db.session.query(QuestionTag).delete()
         db.session.query(Question).delete()
         db.session.commit()
-        
+
         response = client.get("/questions")
         assert response.status_code == 200
         assert response.json == []
@@ -140,9 +139,9 @@ def test_get_all_questions_empty_db(client, app, sample_data):
 def test_get_all_questions_db_error(client, sample_data, mocker):
     """Test database error handling when getting all questions."""
     mock = mocker.patch('website.models.Question.query', 
-                       new_callable=mocker.PropertyMock)
+                   new_callable=mocker.PropertyMock)
     mock.return_value.all.side_effect = Exception("Database error")
-    
+
     response = client.get("/questions")
     assert response.status_code == 500
     assert "error" in response.json
@@ -153,7 +152,7 @@ def test_get_question_by_id_db_error(client, sample_data, mocker):
     mock = mocker.patch('website.models.Question.query', 
                        new_callable=mocker.PropertyMock)
     mock.return_value.get.side_effect = Exception("Database error")
-    
+
     response = client.get("/questions/1")
     assert response.status_code == 500
     assert "error" in response.json
@@ -165,9 +164,9 @@ def test_get_questions_by_tag_db_error(client, sample_data, mocker):
     mock_query.join.return_value = mock_query
     mock_query.filter.return_value = mock_query
     mock_query.all.side_effect = Exception("Database error")
-    
+
     mocker.patch('website.questions.Question.query', mock_query)
-    
+
     response = client.get("/questions/tags?tag=arrays")
     assert response.status_code == 500
     assert "error" in response.json

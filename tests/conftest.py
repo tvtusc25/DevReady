@@ -21,7 +21,7 @@ def app():
 @pytest.fixture
 def client(app):
     """Create a test client for the app."""
-    return app.test_client()
+    return app.test_client(use_cookies=True)
 
 @pytest.fixture
 def mock_subprocess_run(mocker):

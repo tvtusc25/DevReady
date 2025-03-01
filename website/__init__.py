@@ -19,13 +19,22 @@ def create_app(test_config=None):
     app = Flask(__name__)
 
     if test_config is None:
-        db_url = os.environ.get('JAWSDB_URL')
-        if db_url:
+        # Production/Development configuration
+        env = os.environ.get('FLASK_ENV', 'development')
+        if env == 'production':
+            db_url = os.environ.get('JAWSDB_URL')
+            if not db_url:
+                raise ValueError('JAWSDB_URL must be set in production')
             db_url = db_url.replace('mysql://', 'mysql+pymysql://')
-        app.config['SQLALCHEMY_DATABASE_URI'] = db_url or 'sqlite:///devready.db'
+            app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+        else:
+            # Development uses local SQLite database
+            app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///devready.db'
+        
         app.config['OPENAI_API_KEY'] = os.environ.get('OPENAI_API_KEY')
         app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'secret keyyyyy'
     else:
+        # Test configuration
         app.config.update(test_config)
 
     db.init_app(app)
