@@ -73,9 +73,9 @@ def register():
 
 @auth_blueprint.route('/about', methods=['GET', 'POST'])
 def about():
+    """Endpoint to get about page."""
     if current_user.is_authenticated:
         return redirect(url_for('main.main'))
-    """Endpoint to get about page."""
     return render_template('about.html')
 
 @auth_blueprint.route('/logout')
