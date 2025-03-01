@@ -9,7 +9,11 @@ code_exec_blueprint = Blueprint("code_exec", __name__)
 def execute_code(command, timeout=5):
     """Executes a given command in a subprocess and returns the output."""
     try:
-        result = subprocess.run(command, capture_output=True, text=True, timeout=timeout, check=False)
+        result = subprocess.run(command,
+                                capture_output=True,
+                                text=True,
+                                timeout=timeout,
+                                check=False)
         return (result.stdout if result.returncode == 0 else result.stderr, result.returncode)
     except subprocess.TimeoutExpired:
         return ("Execution timed out", 1)

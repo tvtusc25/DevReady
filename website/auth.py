@@ -42,19 +42,19 @@ def register():
         confirm_password = request.form['confirmPassword']
 
         if User.query.filter_by(email=email).first():
-            flash("An account with that email already exists.")
+            flash("An account with that email already exists.", "danger")
             return redirect(url_for('auth.register'))
 
         if User.query.filter_by(username=username).first():
-            flash("Username taken.")
+            flash("Username taken.", "danger")
             return redirect(url_for('auth.register'))
 
         if len(password) > 20 or len(password) < 8:
-            flash("Password must be between 8 and 20 characters.")
+            flash("Password must be between 8 and 20 characters.", "danger")
             return redirect(url_for('auth.register'))
 
         if password != confirm_password:
-            flash("Passwords must match.")
+            flash("Passwords must match.", "danger")
             return redirect(url_for('auth.register'))
 
         new_user = User(username = username,

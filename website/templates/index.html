@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="../static/FaviconLogo.svg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <!-- Ace Editor -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
     <style>
@@ -34,6 +35,7 @@
         <div class="container">
             <a class="navbar-brand d-flex align-items-center" href="/">
                 <img src="../static/DevReadyLogo.svg" alt="DevReady Logo" width="40" height="40" class="me-2">
+                
                 <span>DevReady</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTabs"
@@ -48,7 +50,7 @@
                     <li class="nav-item"><a class="nav-link" href="/settings">Settings</a></li>
                 </ul>
                 <span class="navbar-text">
-                    Hello, <strong>{{ user.username }}</strong>
+                    Hello, <strong>{{ user.username }} <i class="bi bi-person text-dark"></i></strong>
                 </span>
             </div>
         </div>
@@ -64,18 +66,34 @@
                 <!-- Personalized Challenge Section -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5 id="question-title">Two Sum</h5>
+                        {% if question %}
+                        <h5 id="question-title">{{ question.title }}</h5>
                         <small class="text-muted">
-                            Difficulty: <span id="question-difficulty" class="fw-bold">Medium</span> | 
-                            Tags: <span id="question-tags" class="fw-bold">Array, Hash Table</span>
+                            Difficulty: <span id="question-difficulty" class="fw-bold">{{ question.difficulty }}</span>
+                            |
+                            Tags:
+                            <span id="question-tags" class="fw-bold">
+                                {% for tag in question.tags %}
+                                {{ tag.name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </span>
                         </small>
+                        {% else %}
+                        <h5>Question Unavailable</h5>
+                        <small class="text-muted">No suitable problems found.</small>
+                        {% endif %}
                     </div>
                     <div class="card-body">
+                        {% if question %}
                         <p id="question-description" class="card-text">
-                            <!-- Placeholder for the coding question/problem statement -->
-                            Given an array of integers, return indices of the two numbers
-                            such that they add up to a specific target.
+                            {{ question.description }}
                         </p>
+                        {% else %}
+                        <p id="question-description" class="card-text">
+                            Try exploring our problem library or reviewing previous solutions.
+                            If you're new, start with beginner-friendly challenges!
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- AI Helper Section -->
@@ -85,7 +103,8 @@
                         <small class="text-muted">Need help? Get a hint based on your code.</small>
                     </div>
                     <div class="card-body">
-                        <div id="chat-box" class="output-area p-2 bg-light border rounded overflow-scroll" style="height: 250px;">
+                        <div id="chat-box" class="output-area p-2 bg-light border rounded overflow-scroll"
+                            style="height: 250px;">
                             <div class="text-center text-muted mb-2">
                                 <small>Click "Get Hint" to receive AI guidance.</small>
                             </div>
