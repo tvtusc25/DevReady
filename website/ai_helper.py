@@ -1,5 +1,4 @@
 """Blueprint for AI-powered coding hints and analysis."""
-import os
 from flask import Blueprint, jsonify, request, current_app
 from openai import OpenAI
 

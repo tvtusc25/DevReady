@@ -1,3 +1,4 @@
+"""Module for fetching the next question for a user based on their weakest skill."""
 from website.models import MasteryScore, Question, QuestionTag, Submission
 from website.extensions import db
 
@@ -14,12 +15,11 @@ def get_next_question(user_id):
         question = db.session.query(Question) \
             .join(QuestionTag, QuestionTag.questionID == Question.questionID) \
             .filter(QuestionTag.tagID == weakest_tag.tagID) \
-            .outerjoin(Submission, (Submission.questionID == Question.questionID) & (Submission.userID == user_id)) \
+            .outerjoin(Submission, (Submission.questionID == Question.questionID) 
+            & (Submission.userID == user_id)) \
             .filter(Submission.submissionID == None) \
             .order_by(Question.difficulty) \
             .first()
     else:
         # Default: Get any question if no mastery score exists yet
-        question = db.session.query(Question).order_by(Question.difficulty).first()
-
-    return question
+        ques

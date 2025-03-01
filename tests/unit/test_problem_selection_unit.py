@@ -1,3 +1,4 @@
+"""Unit tests for the problem selection algorithm."""
 from website.models import User, Question, Tag, MasteryScore, QuestionTag
 from website.extensions import db
 from website.views import get_next_question
@@ -20,8 +21,12 @@ def test_get_next_question_with_weak_skill(app):
         db.session.commit()
 
         # Create questions related to the tag
-        question1 = Question(title="Recursion Problem 1", description="Solve this recursion problem.", difficulty="Easy")
-        question2 = Question(title="Recursion Problem 2", description="Another recursion problem.", difficulty="Medium")
+        question1 = Question(title="Recursion Problem 1",
+                             description="Solve this recursion problem.",
+                             difficulty="Easy")
+        question2 = Question(title="Recursion Problem 2",
+                             description="Another recursion problem.",
+                             difficulty="Medium")
         db.session.add_all([question1, question2])
         db.session.commit()
 
@@ -42,9 +47,10 @@ def test_get_next_question_without_mastery_scores(app):
         db.session.add(user)
         db.session.commit()
 
-        question1 = Question(title="Intro Question", description="Solve this simple problem.", difficulty="Easy")
+        question1 = Question(title="Intro Question",
+                             description="Solve this simple problem.",
+                             difficulty="Easy")
         db.session.add(question1)
         db.session.commit()
 
-        question = get_next_question(user.userID)
-        assert question is not None
+        question = get_next_ques
