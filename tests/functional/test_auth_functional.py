@@ -1,16 +1,8 @@
 """Functional tests for the auth API endpoints."""
-# pylint: disable=redefined-outer-name,unused-argument
-
-import sys
-from pathlib import Path
 import pytest
 from werkzeug.security import generate_password_hash, check_password_hash
-
-# Add the project root to the Python path
-sys.path.append(str(Path(__file__).parent.parent.parent))
-
-from website.models import User  # pylint: disable=wrong-import-position
-from website.extensions import db  # pylint: disable=wrong-import-position
+from website.models import User
+from website.extensions import db
 
 @pytest.fixture
 def test_user(app):
