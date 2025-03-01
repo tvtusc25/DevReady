@@ -64,18 +64,34 @@
                 <!-- Personalized Challenge Section -->
                 <div class="card mb-4">
                     <div class="card-header">
-                        <h5 id="question-title">Two Sum</h5>
+                        {% if question %}
+                        <h5 id="question-title">{{ question.title }}</h5>
                         <small class="text-muted">
-                            Difficulty: <span id="question-difficulty" class="fw-bold">Medium</span> | 
-                            Tags: <span id="question-tags" class="fw-bold">Array, Hash Table</span>
+                            Difficulty: <span id="question-difficulty" class="fw-bold">{{ question.difficulty }}</span>
+                            |
+                            Tags:
+                            <span id="question-tags" class="fw-bold">
+                                {% for tag in question.tags %}
+                                {{ tag.name }}{% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                            </span>
                         </small>
+                        {% else %}
+                        <h5>Question Unavailable</h5>
+                        <small class="text-muted">No suitable problems found.</small>
+                        {% endif %}
                     </div>
                     <div class="card-body">
+                        {% if question %}
                         <p id="question-description" class="card-text">
-                            <!-- Placeholder for the coding question/problem statement -->
-                            Given an array of integers, return indices of the two numbers
-                            such that they add up to a specific target.
+                            {{ question.description }}
                         </p>
+                        {% else %}
+                        <p id="question-description" class="card-text">
+                            Try exploring our problem library or reviewing previous solutions.
+                            If you're new, start with beginner-friendly challenges!
+                        </p>
+                        {% endif %}
                     </div>
                 </div>
                 <!-- AI Helper Section -->
@@ -85,7 +101,8 @@
                         <small class="text-muted">Need help? Get a hint based on your code.</small>
                     </div>
                     <div class="card-body">
-                        <div id="chat-box" class="output-area p-2 bg-light border rounded overflow-scroll" style="height: 250px;">
+                        <div id="chat-box" class="output-area p-2 bg-light border rounded overflow-scroll"
+                            style="height: 250px;">
                             <div class="text-center text-muted mb-2">
                                 <small>Click "Get Hint" to receive AI guidance.</small>
                             </div>
