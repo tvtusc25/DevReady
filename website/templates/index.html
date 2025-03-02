@@ -67,7 +67,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         {% if question %}
-                        <h5 id="question-title">{{ question.title }}</h5>
+                        <h5 id="question-title" data-question-id="{{ question.questionID }}">{{ question.title }}</h5>
                         <small class="text-muted">
                             Difficulty: <span id="question-difficulty" class="fw-bold">{{ question.difficulty }}</span>
                             |
