@@ -1,8 +1,8 @@
 """Configuration for pytest fixtures."""
 import pytest
-from website import create_app, db
-from website.models import User, Tag, Question, QuestionTag, TestCase
 from werkzeug.security import generate_password_hash
+from website import create_app, db
+from website.models import User, Tag, Question, QuestionTag, TestCase, MasteryScore
 
 @pytest.fixture
 def app():
@@ -49,6 +49,10 @@ def sample_data(client, app):
         db.session.add_all([tag1, tag2])
         db.session.commit()
 
+        mastery = MasteryScore(userID=test_user.userID, tagID=tag2.tagID, score=1)  # Low mastery
+        db.session.add(mastery)
+        db.session.commit()
+
         q1 = Question(title="Sum Array",
                       description="Find the sum of array elements",
                       difficulty="easy")
@@ -89,5 +93,3 @@ def test_user(app):
         db.session.add(user)
         db.session.commit()
         yield user
-        db.session.query(User).delete()
-        db.session.commit()

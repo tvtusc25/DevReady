@@ -157,3 +157,42 @@ def test_get_questions_malformed_json(client, mocker):
     response = client.get("/questions")
     assert response.status_code == 500
     assert "error" in response.json
+
+@pytest.mark.usefixtures("sample_data")
+def test_next_question(client):
+    """Test if the main page recommends a question based on the user's weakest skill."""
+    response = client.get('/')
+    assert response.status_code == 200
+    assert b"Reverse String" in response.data
+
+def test_next_question_no_mastery(client, app, test_user):
+    """Test if the main page recommends any question for a new user without mastery scores."""
+    with app.app_context():
+        user = test_user
+        with client.session_transaction() as session:
+            session['_user_id'] = str(user.userID)
+        question1 = Question(title="Intro Question",
+                             description="Solve this simple problem.",
+                             difficulty="Easy")
+        db.session.add(question1)
+        db.session.commit()
+
+    response = client.get('/')
+    assert response.status_code == 200
+    assert b"Intro Question" in response.data
+
+@pytest.mark.usefixtures("sample_data")
+def test_library_page(client):
+    """Test if the library page loads and displays questions grouped by tags."""
+    response = client.get("/library")
+
+    # Ensure the page loads successfully
+    assert response.status_code == 200
+
+    # Check if tags are displayed in the UI
+    assert b"arrays" in response.data
+    assert b"strings" in response.data
+
+    # Check if question titles appear in the response
+    assert b"Sum Array" in response.data
+    assert b"Reverse String" in response.data

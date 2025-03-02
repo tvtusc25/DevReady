@@ -1,7 +1,8 @@
 """Unit tests for the problem selection algorithm."""
+import pytest
 from website.models import User, Question, Tag, MasteryScore, QuestionTag
 from website.extensions import db
-from website.views import get_next_question
+from website.views import get_next_question, get_all_tags_with_questions
 
 def test_get_next_question_with_weak_skill(app):
     """Test that the function selects an unattempted question based on weakest skill."""
@@ -53,5 +54,4 @@ def test_get_next_question_without_mastery_scores(app):
         db.session.add(question1)
         db.session.commit()
 
-        question = get_next_question(user.userID)
-        assert question is not None
+        question = get_next_question(user.u
