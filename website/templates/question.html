@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ question.title }} - DevReady</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="../static/FaviconLogo.svg">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- Ace Editor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+    <style>
+        .code-editor {
+            font-family: monospace;
+            height: 300px;
+            resize: vertical;
+        }
+
+        .output-area {
+            background: #f8f9fa;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            min-height: 100px;
+            font-family: monospace;
+        }
+
+        .question-stats {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .tag {
+            background-color: #e9ecef;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            margin-right: 0.5rem;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="../static/DevReadyLogo.svg" alt="DevReady Logo" width="40" height="40" class="me-2">
+                <span>DevReady</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTabs"
+                aria-controls="navbarTabs" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTabs">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="/library">Library</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/settings">Settings</a></li>
+                </ul>
+                <span class="navbar-text">
+                    Hello, <strong>{{ user.username }} <i class="bi bi-person text-dark"></i></strong>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/library">Library</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ question.title }}</li>
+            </ol>
+        </nav>
+
+        <div class="row g-4">
+            <!-- Left Column: Question Details + AI Helper -->
+            <div class="col-md-4">
+                <!-- Question Details Section -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-start">
+                        <div>
+                            <h5 id="question-title" data-question-id="{{ question.questionID }}">{{ question.title }}</h5>
+                            <div class="question-stats">
+                                <span class="badge {% if question.difficulty == 'Easy' %}bg-success{% elif question.difficulty == 'Medium' %}bg-warning{% else %}bg-danger{% endif %}">
+                                    {{ question.difficulty }}
+                                </span>
+                                <span class="ms-2">
+                                    <i class="bi bi-check-circle"></i> 
+                                    {{ question.success_rate }}% success rate
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% for tag in question.tags %}
+                            <span class="tag">{{ tag.name }}</span>
+                            {% endfor %}
+                        </div>
+                        <p id="question-description" class="card-text">
+                            {{ question.description }}
+                        </p>
+                        {% if question.examples %}
+                        <div class="mt-3">
+                            <h6>Examples:</h6>
+                            {% for example in question.examples %}
+                            <div class="mb-2">
+                                <strong>Input:</strong> {{ example.input }}<br>
+                                <strong>Output:</strong> {{ example.output }}
+                                {% if example.explanation %}
+                                <br><strong>Explanation:</strong> {{ example.explanation }}
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- AI Helper Section -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5>AI Helper</h5>
+                        <small class="text-muted">Need help? Get a hint based on your code.</small>
+                    </div>
+                    <div class="card-body">
+                        <div id="chat-box" class="output-area p-2 bg-light border rounded overflow-scroll"
+                            style="height: 250px;">
+                            <div class="text-center text-muted mb-2">
+                                <small>Click "Get Hint" to receive AI guidance.</small>
+                            </div>
+                        </div>
+                        <button id="hint-btn" class="btn btn-dark w-100 mt-2">Get Hint!</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Code Interpreter Section -->
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>&lt;/&gt; Code (Python 3)</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Ace Editor Container -->
+                        <div id="editor" class="border rounded-1" data-template="{{ question.template_code | default('') }}"></div>
+                        <div class="d-flex justify-content-end gap-2 mt-2">
+                            <button type="button" id="run-btn" class="btn btn-secondary">Run</button>
+                            <button type="button" id="submit-btn" class="btn btn-dark">Submit</button>
+                        </div>
+                        <hr>
+                        <h6>Output</h6>
+                        <div id="output" class="output-area p-2 bg-light border">
+                            <p>No output yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center text-muted py-3 mt-4 border-top">
+        <small>© 2025 DevReady. All Rights Reserved.</small>
+    </footer>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Load Ace Editor Setup -->
+    <script src="../static/js/ace-editor.js"></script>
+    <!-- AI Helper JS -->
+    <script src="../static/js/ai-helper.js"></script>
+
+</body>
+
+</html>

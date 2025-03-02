@@ -1,6 +1,6 @@
 """This module handles the endpoints and functions related to questions."""
-from flask import Blueprint, request, jsonify
-from flask_login import login_required
+from flask import Blueprint, request, jsonify, render_template, redirect, url_for
+from flask_login import login_required, current_user
 from .models import Question, QuestionTag, MasteryScore, Submission, Tag
 from .extensions import db
 
@@ -27,20 +27,40 @@ def get_questions():
 @questions_blueprint.route("/questions/<int:question_id>", methods=["GET"])
 @login_required
 def get_question_by_id(question_id):
-    """Get a question, with sample test cases, by its ID."""
+    """Get a question by its ID and render the question template."""
     try:
-        question = Question.query.get(question_id)
-        if not question:
-            return jsonify({"error": "Question not found"}), 404
-        return jsonify({
-            **question.to_dict(),
-            "tags": [tag.name for tag in question.tags],
-            "sample_test_cases": [
-                {"input": tc.inputData, "expected_output": tc.expectedOutput}
-                for tc in question.testCases
-                if tc.isSample
-            ]
-        })
+        if request.headers.get('Accept') == 'application/json':
+            question = Question.query.get(question_id)
+            if not question:
+                return jsonify({"error": "Question not found"}), 404
+            return jsonify({
+                **question.to_dict(),
+                "tags": [tag.name for tag in question.tags],
+                "sample_test_cases": [
+                    {"input": tc.inputData, "expected_output": tc.expectedOutput}
+                    for tc in question.testCases
+                    if tc.isSample
+                ]
+            })
+
+        question = Question.query.get_or_404(question_id)
+        examples = [{
+            "input": tc.inputData,
+            "output": tc.expectedOutput
+        } for tc in question.testCases if tc.isSample]
+
+        total_submissions = Submission.query.filter_by(questionID=question_id).count()
+        successful_submissions = Submission.query.filter_by(
+            questionID=question_id, result="Passed"
+        ).count()
+        success_rate = round((successful_submissions / total_submissions * 100) 
+                           if total_submissions > 0 else 0)
+
+        return render_template('question.html',
+                             question=question,
+                             examples=examples,
+                             success_rate=success_rate,
+                             user=current_user)
     except Exception as e:
         return jsonify({"error": "Failed to fetch question", "details": str(e)}), 500
 
