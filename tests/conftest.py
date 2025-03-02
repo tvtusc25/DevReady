@@ -55,10 +55,12 @@ def sample_data(client, app):
 
         q1 = Question(title="Sum Array",
                       description="Find the sum of array elements",
-                      difficulty="easy")
+                      difficulty="easy",
+                      expected_method="sumArray")
         q2 = Question(title="Reverse String",
                       description="Reverse the given string",
-                      difficulty="easy")
+                      difficulty="easy",
+                      expected_method="reverseString")
         db.session.add_all([q1, q2])
         db.session.commit()
 
@@ -69,11 +71,11 @@ def sample_data(client, app):
 
         tc1 = TestCase(questionID=q1.questionID,
                        inputData="[1, 2, 3]",
-                       expectedOutput="6",
+                       expectedOutput='"6"',
                        isSample=True)
         tc2 = TestCase(questionID=q1.questionID,
                        inputData="[4, 5, 6]",
-                       expectedOutput="15",
+                       expectedOutput='"15"',
                        isSample=False)
         db.session.add_all([tc1, tc2])
 

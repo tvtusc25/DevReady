@@ -17,7 +17,7 @@ def test_get_all_questions(client) -> None:
     assert data[0]["tags"] == ["arrays"]
     assert len(data[0]["sample_test_cases"]) == 1
     assert data[0]["sample_test_cases"][0]["input"] == "[1, 2, 3]"
-    assert data[0]["sample_test_cases"][0]["expected_output"] == "6"
+    assert data[0]["sample_test_cases"][0]["expected_output"] == '"6"'
 
     assert data[1]["title"] == "Reverse String"
     assert data[1]["description"] == "Reverse the given string"
