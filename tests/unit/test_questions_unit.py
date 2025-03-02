@@ -54,4 +54,24 @@ def test_get_next_question_without_mastery_scores(app):
         db.session.add(question1)
         db.session.commit()
 
-        question = get_next_question(user.u
+        question = get_next_question(user.userID)
+        assert question is not None
+
+@pytest.mark.usefixtures("sample_data")
+def test_get_all_tags_with_questions(app):
+    """Test fetching all tags with their associated questions."""
+    with app.app_context():
+        tag_questions = get_all_tags_with_questions()
+
+        # Check if tags exist in the dictionary
+        assert "arrays" in tag_questions
+        assert "strings" in tag_questions
+
+        # Check if questions are correctly categorized
+        assert len(tag_questions["arrays"]) == 2  # Two questions under 'arrays'
+        assert len(tag_questions["strings"]) == 1  # One question under 'strings'
+
+        # Check if correct questions are retrieved
+        assert any(q.title == "Sum Array" for q in tag_questions["arrays"])
+        assert any(q.title == "Reverse String" for q in tag_questions["arrays"])
+        assert tag_questions["strings"][0].title == "Reverse String"
