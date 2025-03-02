@@ -2,12 +2,12 @@
 import os
 import subprocess
 import tempfile
+import shutil
+import json
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
 from website.models import Question, Submission
 from website.extensions import db
-import shutil
-import json
 
 code_exec_blueprint = Blueprint("code_exec", __name__)
 
@@ -31,8 +31,25 @@ def execute_code_with_test(code, test_input, expected_method):
     """Runs code on a given test input and returns the result."""
     temp_dir = tempfile.mkdtemp()
     try:
+        imports = (
+            "from typing import List, Dict, Tuple\n"
+            "import math\n"
+            "import heapq\n"
+            "import bisect\n"
+            "import collections\n"
+            "import itertools\n"
+            "import string\n"
+            "import re\n"
+            "import random\n"
+            "import time\n"
+            "import sys\n"
+            "import json\n"
+            "import functools\n"
+            "import operator\n"
+        )
+
         runner = (
-            "if __name__ == '__main__':\n"
+            "\nif __name__ == '__main__':\n"
             "    import sys, json\n"
             "    data = sys.stdin.read().strip()\n"
             "    args = json.loads(data)\n"
@@ -40,7 +57,8 @@ def execute_code_with_test(code, test_input, expected_method):
             f"    result = sol.{expected_method}(args)\n"
             "    print(result)\n"
         )
-        full_code = code + "\n" + runner
+
+        full_code = imports + code + runner
         code_file = os.path.join(temp_dir, "solution.py")
 
         with open(code_file, "w", encoding="utf-8") as f:
@@ -127,7 +145,7 @@ def submit_solution(question_id):
         db.session.add(submission)
         db.session.commit()
     except Exception as e:
-        return jsonify({"error": "Failed to save submission"}), 500
+        return jsonify({"error": f"Failed to save submission: {str(e)}"}), 500
 
     return jsonify({
         "passed": all_passed,
