@@ -64,7 +64,7 @@
             <!-- Left Column: Question Section + AI Helper -->
             <div class="col-md-4">
                 <!-- Personalized Challenge Section -->
-                <div class="card mb-4">
+                <div class="card mb-2">
                     <div class="card-header">
                         {% if question %}
                         <h5 id="question-title" data-question-id="{{ question.questionID }}">{{question.questionID}}. {{ question.title }}</h5>
@@ -115,7 +115,7 @@
             </div>
             <!-- Code Interpreter Section -->
             <div class="col-md-8">
-                <div class="card">
+                <div class="card mb-2">
                     <div class="card-header">
                         <h5>&lt;/&gt; Code (Python 3)</h5>
                     </div>
@@ -127,9 +127,36 @@
                             <button type="button" id="submit-btn" class="btn btn-dark">Submit</button>
                             <button type="button" id="skip-btn" class="btn btn-warning">Skip</button>
                         </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>&gt;_ Test Result</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="test-case-buttons" class="d-flex flex-wrap gap-2">
+                            {% for sample_test in sample_tests %}
+                                <button class="btn btn-outline-dark {% if loop.first %}active{% endif %}" 
+                                        onclick="showTestCase('{{ sample_test.expectedOutput | escape }}', '{{ sample_test.inputData | escape }}', this)">
+                                    Case {{ loop.index }}
+                                </button>
+                            {% endfor %}
+                        </div>
                         <hr>
-                        <h6>Output</h6>
-                        <div id="output" class="output-area p-2 bg-light border">
+                        <h6>Test Case Input:</h6>
+                        <div id="test-case-input" class="p-2 bg-light border mb-2">
+                            <strong id="input-text">
+                                {{ sample_tests[0].inputData if sample_tests else 'No test cases available.' }}
+                            </strong>
+                        </div>
+                        <h6>Expected Output:</h6>
+                        <div id="expected-output" class="p-2 bg-light border mb-2">
+                            <strong id="expected-text">
+                                {{ sample_tests[0].expectedOutput if sample_tests else 'No test cases available.' }}
+                            </strong>
+                        </div>
+                        <h6>Actual Output:</h6>
+                        <div id="actual-output" class="p-2 bg-light border">
                             <p>No output yet.</p>
                         </div>
                     </div>

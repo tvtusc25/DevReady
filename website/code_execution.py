@@ -55,7 +55,7 @@ def execute_code_with_test(code, test_input, expected_method):
             "    args = json.loads(data)\n"
             "    sol = Solution()\n"
             f"    result = sol.{expected_method}(args)\n"
-            "    print(result)\n"
+            "    print(json.dumps(result))\n"  # Print as JSON
         )
 
         full_code = imports + code + runner
@@ -71,7 +71,15 @@ def execute_code_with_test(code, test_input, expected_method):
             text=True,
             timeout=5
         )
-        return process.stdout.strip()
+        if process.returncode != 0:
+            # Extract just the last line from stderr (usually the error message)
+            err_lines = process.stderr.strip().splitlines()
+            error_message = err_lines[-1] if err_lines else "Unknown error occurred."
+            return {"error": error_message}
+
+        # Parse and return the output as a proper type
+        return json.loads(process.stdout.strip())
+
     finally:
         shutil.rmtree(temp_dir)
 
