@@ -1,7 +1,8 @@
-"""This module handles the endpoints related to questions."""
+"""This module handles the endpoints and functions related to questions."""
 from flask import Blueprint, request, jsonify
-from flask_login import login_required, current_user
-from .models import Question, QuestionTag
+from flask_login import login_required
+from .models import Question, QuestionTag, MasteryScore, Submission, Tag
+from .extensions import db
 
 questions_blueprint = Blueprint("questions", __name__)
 
@@ -67,3 +68,53 @@ def get_questions_by_tag():
     except Exception as e:
         return jsonify({"error": "Failed to fetch questions by tag", "details": str(e)}), 500
 
+def get_next_question(user_id):
+    """Fetch the next question based on the user's weakest skill."""
+    # Find the weakest skill (tag with lowest mastery score)
+    weakest_tag = (
+        db.session.query(MasteryScore)
+        .filter_by(userID=user_id)
+        .order_by(MasteryScore.score.asc())
+        .first()
+    )
+
+    if weakest_tag:
+        # Get an unattempted question for this tag
+        question = (
+            db.session.query(Question)
+            .join(QuestionTag, QuestionTag.questionID == Question.questionID)
+            .filter(QuestionTag.tagID == weakest_tag.tagID)
+            .outerjoin(
+                Submission,
+                (Submission.questionID == Question.questionID) & (Submission.userID == user_id)
+            )
+            .filter(Submission.submissionID == None)
+            .order_by(Question.difficulty)
+            .first()
+        )
+    else:
+        # Default: Get any question if no mastery score exists yet
+        question = db.session.query(Question).order_by(Question.difficulty).first()
+
+    return question
+
+def get_all_tags_with_questions():
+    """Fetch all tags with their associated questions."""
+    # Fetch all tags and their associated questions in one optimized query
+    tag_questions = {}
+
+    tags_with_questions = (
+        db.session.query(Tag.name, Question)
+        .join(QuestionTag, Tag.tagID == QuestionTag.tagID)
+        .join(Question, Question.questionID == QuestionTag.questionID)
+        .order_by(Tag.name, Question.difficulty)
+        .all()
+    )
+
+    # Group questions under their respective tags
+    for tag_name, question in tags_with_questions:
+        if tag_name not in tag_questions:
+            tag_questions[tag_name] = []
+        tag_questions[tag_name].append(question)
+
+    return tag_questions

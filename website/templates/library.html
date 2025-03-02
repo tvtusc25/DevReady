@@ -44,80 +44,43 @@
 
         <!-- Bootstrap Accordion for Problem Categories -->
         <div class="accordion" id="problemAccordion">
-            <!-- Arrays Category -->
+            {% for tag, questions in tag_questions.items() %}
             <div class="accordion-item">
-                <h2 class="accordion-header" id="headingArrays">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseArrays" aria-expanded="true" aria-controls="collapseArrays">
-                        Arrays
+                <h2 class="accordion-header" id="heading{{ loop.index }}">
+                    <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#collapse{{ loop.index }}"
+                        aria-expanded="{% if loop.first %}true{% else %}false{% endif %}"
+                        aria-controls="collapse{{ loop.index }}">
+                        {{ tag }}
                     </button>
                 </h2>
-                <div id="collapseArrays" class="accordion-collapse collapse show" aria-labelledby="headingArrays"
-                    data-bs-parent="#problemAccordion">
+                <div id="collapse{{ loop.index }}"
+                    class="accordion-collapse collapse {% if loop.first %}show{% endif %}"
+                    aria-labelledby="heading{{ loop.index }}" data-bs-parent="#problemAccordion">
                     <div class="accordion-body">
                         <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="/problems/array_problem_1.html" class="stretched-link">Find Two Sum</a>
+                            {% for question in questions %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <a href="/question/{{ question.questionID }}" class="stretched-link fw-bold text-dark">
+                                    {{ question.title }}
+                                </a>
+                                <div class="d-flex align-items-center">
+                                    {% if question.tags %}
+                                    <span class="text-muted small me-2">
+                                        {% for tag in question.tags %}
+                                            {{ tag.name }}{% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </span>
+                                    {% endif %}
+                                    <span class="badge bg-dark">{{ question.difficulty }}</span>
+                                </div>
                             </li>
-                            <li class="list-group-item">
-                                <a href="/problems/array_problem_2.html" class="stretched-link">Rotate Array</a>
-                            </li>
-                            <!-- More array problems can be added here -->
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
             </div>
-
-            <!-- Breadth-First Search Category -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingBFS">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseBFS" aria-expanded="false" aria-controls="collapseBFS">
-                        Breadth-First Search
-                    </button>
-                </h2>
-                <div id="collapseBFS" class="accordion-collapse collapse" aria-labelledby="headingBFS"
-                    data-bs-parent="#problemAccordion">
-                    <div class="accordion-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="/problems/bfs_problem_1.html" class="stretched-link">Shortest Path in Grid</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="/problems/bfs_problem_2.html" class="stretched-link">Word Ladder</a>
-                            </li>
-                            <!-- More BFS problems can be added here -->
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dynamic Programming Category -->
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="headingDP">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#collapseDP" aria-expanded="false" aria-controls="collapseDP">
-                        Dynamic Programming
-                    </button>
-                </h2>
-                <div id="collapseDP" class="accordion-collapse collapse" aria-labelledby="headingDP"
-                    data-bs-parent="#problemAccordion">
-                    <div class="accordion-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                <a href="/problems/dp_problem_1.html" class="stretched-link">Longest Increasing
-                                    Subsequence</a>
-                            </li>
-                            <li class="list-group-item">
-                                <a href="/problems/dp_problem_2.html" class="stretched-link">0/1 Knapsack</a>
-                            </li>
-                            <!-- More DP problems can be added here -->
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional categories can be added here -->
+            {% endfor %}
         </div>
     </div>
 

@@ -1,7 +1,8 @@
 """Unit tests for the problem selection algorithm."""
+import pytest
 from website.models import User, Question, Tag, MasteryScore, QuestionTag
 from website.extensions import db
-from website.views import get_next_question
+from website.views import get_next_question, get_all_tags_with_questions
 
 def test_get_next_question_with_weak_skill(app):
     """Test that the function selects an unattempted question based on weakest skill."""
@@ -55,3 +56,22 @@ def test_get_next_question_without_mastery_scores(app):
 
         question = get_next_question(user.userID)
         assert question is not None
+
+@pytest.mark.usefixtures("sample_data")
+def test_get_all_tags_with_questions(app):
+    """Test fetching all tags with their associated questions."""
+    with app.app_context():
+        tag_questions = get_all_tags_with_questions()
+
+        # Check if tags exist in the dictionary
+        assert "arrays" in tag_questions
+        assert "strings" in tag_questions
+
+        # Check if questions are correctly categorized
+        assert len(tag_questions["arrays"]) == 2  # Two questions under 'arrays'
+        assert len(tag_questions["strings"]) == 1  # One question under 'strings'
+
+        # Check if correct questions are retrieved
+        assert any(q.title == "Sum Array" for q in tag_questions["arrays"])
+        assert any(q.title == "Reverse String" for q in tag_questions["arrays"])
+        assert tag_questions["strings"][0].title == "Reverse String"
