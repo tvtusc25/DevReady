@@ -24,6 +24,8 @@ class Question(db.Model):
     description = db.Column(db.Text, nullable=False)
     difficulty = db.Column(db.String(50), nullable=False)
     createdDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    template_code = db.Column(db.Text, nullable=True)
+    expected_method = db.Column(db.String(50), nullable=True)
 
     submissions = db.relationship('Submission', back_populates='question', lazy=True)
     questionTags = db.relationship('QuestionTag', back_populates='question', lazy=True)
@@ -35,7 +37,8 @@ class Question(db.Model):
             'title': self.title,
             'description': self.description,
             'difficulty': self.difficulty,
-            'createdDate': self.createdDate.isoformat() if self.createdDate else None
+            'createdDate': self.createdDate.isoformat() if self.createdDate else None,
+            'expected_method': self.expected_method if self.expected_method else None
         }
 
     @property
@@ -70,6 +73,7 @@ class Submission(db.Model):
     submissionID = db.Column(db.Integer, primary_key=True)
     userID = db.Column(db.Integer, db.ForeignKey('user.userID'), nullable=False)
     questionID = db.Column(db.Integer, db.ForeignKey('question.questionID'), nullable=False)
+    code = db.Column(db.Text, nullable=False)  # Added code field
     result = db.Column(db.String(50), nullable=False)
     runtime = db.Column(db.Integer, nullable=True)
     language = db.Column(db.String(50), nullable=False)
