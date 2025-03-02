@@ -67,7 +67,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         {% if question %}
-                        <h5 id="question-title" data-question-id="{{ question.questionID }}">{{ question.title }}</h5>
+                        <h5 id="question-title" data-question-id="{{ question.questionID }}">{{question.questionID}}. {{ question.title }}</h5>
                         <small class="text-muted">
                             Difficulty: <span id="question-difficulty" class="fw-bold">{{ question.difficulty }}</span>
                             |
@@ -121,7 +121,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Ace Editor Container -->
-                        <div id="editor" class="border rounded-1"></div>
+                        <div id="editor" class="border rounded-1" data-template="{{ question.template_code | default('')}}"></div>
                         <div class="d-flex justify-content-end gap-2 mt-2">
                             <button type="button" id="run-btn" class="btn btn-secondary">Run</button>
                             <button type="button" id="submit-btn" class="btn btn-dark">Submit</button>

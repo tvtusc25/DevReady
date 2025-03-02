@@ -1,7 +1,15 @@
 // Load Ace Editor
 document.addEventListener("DOMContentLoaded", function () {
     var editor = ace.edit("editor");
+    console.log(editor)
     editor.setTheme("ace/theme/xcode");
+
+    // Retrieve the template from the hidden data attribute
+    var template = document.getElementById("editor").dataset.template;
+    if (template) {
+        editor.setValue(template, -1); // -1 prevents cursor moving to the end
+    }
+
     editor.setOptions({
         fontSize: "14px",
         showPrintMargin: false,
@@ -22,17 +30,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const code = editor.getValue();
         const outputDiv = document.getElementById("output");
-        
+
         try {
             outputDiv.innerHTML = '<p class="text-muted">Running sample tests...</p>';
-            
+
             const response = await fetch(`/run/${questionId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({ code })
             });
-            
+
             const result = await response.json();
             if (result.error) {
                 outputDiv.innerHTML = `<pre class="text-danger">${result.error}</pre>`;
@@ -43,8 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="${result.passed ? 'text-success' : 'text-danger'}">
                     <h6>${result.passed ? 'All Sample Tests Passed! 🎉' : 'Some Sample Tests Failed'}</h6>
                     ${result.results
-                        .filter(test => test.input !== 'Hidden')
-                        .map(test => `
+                    .filter(test => test.input !== 'Hidden')
+                    .map(test => `
                             <div class="test-case border rounded p-2 my-2 ${test.passed ? 'border-success' : 'border-danger'}">
                                 <div>Input: <code>${test.input}</code></div>
                                 <div>Expected: <code>${test.expected}</code></div>
@@ -59,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         `).join('')}
                 </div>
             `;
-            
+
             outputDiv.innerHTML = resultHtml;
         } catch (error) {
             outputDiv.innerHTML = `<pre class="text-danger">Error: ${error.message}</pre>`;
@@ -75,24 +83,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const code = editor.getValue();
         const outputDiv = document.getElementById("output");
-        
+
         try {
             outputDiv.innerHTML = '<p class="text-muted">Testing solution...</p>';
-            
+
             const response = await fetch(`/submit/${questionId}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
                 body: JSON.stringify({ code })
             });
-            
+
             const result = await response.json();
             const resultHtml = `
                 <div class="${result.passed ? 'text-success' : 'text-danger'}">
                     <h6>${result.passed ? 'All Tests Passed!' : 'Some Tests Failed'}</h6>
                     ${result.results
-                        .filter(test => test.input !== 'Hidden')
-                        .map(test => `
+                    .filter(test => test.input !== 'Hidden')
+                    .map(test => `
                             <div class="test-case border rounded p-2 my-2 ${test.passed ? 'border-success' : 'border-danger'}">
                                 <div>Input: <code>${test.input}</code></div>
                                 <div>Expected: <code>${test.expected}</code></div>
@@ -107,14 +115,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         `).join('')}
                 </div>
             `;
-            
+
             outputDiv.innerHTML = resultHtml;
         } catch (error) {
             outputDiv.innerHTML = `<pre class="text-danger">Error: ${error.message}</pre>`;
         }
     });
 
-    document.getElementById("skip-btn").addEventListener("click", function() {
+    document.getElementById("skip-btn").addEventListener("click", function () {
         if (confirm('Are you sure you want to skip this question?')) {
             window.location.reload();
         }
