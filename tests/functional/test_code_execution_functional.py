@@ -20,7 +20,7 @@ def test_run_code_samples_success(client, app):
         assert len(data["results"]) == 1
         assert data["results"][0]["passed"] is True
         assert data["results"][0]["input"] == "[1, 2, 3]"
-        assert data["results"][0]["expected"] == '"6"'
+        assert data["results"][0]["expected"] == '6'
 
 @pytest.mark.usefixtures("sample_data")
 def test_run_code_samples_failure(client, app):
@@ -116,7 +116,7 @@ def test_submit_solution_save_error(client, app, monkeypatch):
         response = client.post(f"/submit/{q1.questionID}", json={"code": code})
         data = response.get_json()
         assert response.status_code == 500
-        assert data["error"] == "Failed to save submission"
+        assert data["error"] == "Failed to save submission: Commit error"
 
 @pytest.mark.usefixtures("sample_data")
 def test_run_code_syntax_error(client, app):

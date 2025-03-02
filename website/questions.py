@@ -1,7 +1,7 @@
 """This module handles the endpoints and functions related to questions."""
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Question, QuestionTag, MasteryScore, Submission, Tag
+from .models import Question, QuestionTag, MasteryScore, Submission, Tag, TestCase
 from .extensions import db
 
 questions_blueprint = Blueprint("questions", __name__)
@@ -116,7 +116,8 @@ def get_next_question(user_id):
         # Default: Get any question if no mastery score exists yet
         question = db.session.query(Question).order_by(Question.difficulty).first()
 
-    return question
+    sample_tests = [test for test in question.testCases if test.isSample]
+    return question, sample_tests
 
 def get_all_tags_with_questions():
     """Fetch all tags with their associated questions."""
