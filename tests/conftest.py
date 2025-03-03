@@ -71,11 +71,11 @@ def sample_data(client, app):
 
         tc1 = TestCase(questionID=q1.questionID,
                        inputData="[1, 2, 3]",
-                       expectedOutput='"6"',
+                       expectedOutput=6,
                        isSample=True)
         tc2 = TestCase(questionID=q1.questionID,
                        inputData="[4, 5, 6]",
-                       expectedOutput='"15"',
+                       expectedOutput=15,
                        isSample=False)
         db.session.add_all([tc1, tc2])
 

@@ -1,7 +1,7 @@
 """This module handles the endpoints and functions related to questions."""
 from flask import Blueprint, request, jsonify, render_template, redirect, url_for
 from flask_login import login_required, current_user
-from .models import Question, QuestionTag, MasteryScore, Submission, Tag
+from .models import Question, QuestionTag, MasteryScore, Submission, Tag, TestCase
 from .extensions import db
 
 questions_blueprint = Blueprint("questions", __name__)
@@ -29,21 +29,9 @@ def get_questions():
 def get_question_by_id(question_id):
     """Get a question by its ID and render the question template."""
     try:
-        if request.headers.get('Accept') == 'application/json':
-            question = Question.query.get(question_id)
-            if not question:
-                return jsonify({"error": "Question not found"}), 404
-            return jsonify({
-                **question.to_dict(),
-                "tags": [tag.name for tag in question.tags],
-                "sample_test_cases": [
-                    {"input": tc.inputData, "expected_output": tc.expectedOutput}
-                    for tc in question.testCases
-                    if tc.isSample
-                ]
-            })
-
-        question = Question.query.get_or_404(question_id)
+        question = Question.query.get(question_id)
+        if not question:
+            return jsonify({"error": "Question not found"}), 404
         examples = [{
             "input": tc.inputData,
             "output": tc.expectedOutput
@@ -116,7 +104,8 @@ def get_next_question(user_id):
         # Default: Get any question if no mastery score exists yet
         question = db.session.query(Question).order_by(Question.difficulty).first()
 
-    return question
+    sample_tests = [test for test in question.testCases if test.isSample]
+    return question, sample_tests
 
 def get_all_tags_with_questions():
     """Fetch all tags with their associated questions."""
