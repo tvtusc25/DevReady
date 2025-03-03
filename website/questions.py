@@ -29,21 +29,9 @@ def get_questions():
 def get_question_by_id(question_id):
     """Get a question by its ID and render the question template."""
     try:
-        if request.headers.get('Accept') == 'application/json':
-            question = Question.query.get(question_id)
-            if not question:
-                return jsonify({"error": "Question not found"}), 404
-            return jsonify({
-                **question.to_dict(),
-                "tags": [tag.name for tag in question.tags],
-                "sample_test_cases": [
-                    {"input": tc.inputData, "expected_output": tc.expectedOutput}
-                    for tc in question.testCases
-                    if tc.isSample
-                ]
-            })
-
-        question = Question.query.get_or_404(question_id)
+        question = Question.query.get(question_id)
+        if not question:
+            return jsonify({"error": "Question not found"}), 404
         examples = [{
             "input": tc.inputData,
             "output": tc.expectedOutput

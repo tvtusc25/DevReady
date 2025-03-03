@@ -29,10 +29,8 @@ def test_get_question_by_id(client) -> None:
     response = client.get("/questions/1")
     assert response.status_code == 200
 
-    data = response.json
-    assert data["title"] == "Sum Array"
-    assert data["tags"] == ["arrays"]
-    assert len(data["sample_test_cases"]) == 1
+    assert b"Sum Array" in response.data
+    assert b"arrays" in response.data
 
     response = client.get("/questions/999")
     assert response.status_code == 404
